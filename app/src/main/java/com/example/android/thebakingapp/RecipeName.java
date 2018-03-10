@@ -1,0 +1,23 @@
+package com.example.android.thebakingapp;
+
+/**
+ * Created by Arjun Vidyarthi on 10-Mar-18.
+ */
+
+public class RecipeName {
+    int id;
+    String name;
+
+    public RecipeName(int id, String name){
+        this.id = id;
+        this.name = name;
+    }
+
+    public int getId(){
+        return id;
+    }
+
+    public String getName(){
+        return name;
+    }
+}
