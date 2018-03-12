@@ -1,6 +1,8 @@
 package com.example.android.thebakingapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
     String LOG_TAG;
     RecyclerView recyclerView;
     ListAdapter adapter;
+    Activity context;
 
     public ListFragment(){
 
@@ -34,7 +37,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-
+        context = getActivity();
         final View rootView = inflater.inflate(R.layout.fragment_list, container, false);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_list);
@@ -86,6 +89,11 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
 
     @Override
     public void onClick(RecipeName thisRecipe) {
+        Intent intent = new Intent(context, RecipeActivity.class);
+        Bundle extras = new Bundle();
 
+        extras.putInt("RECIPE_ID", thisRecipe.getId());
+        intent.putExtras(extras);
+        getActivity().startActivity(intent);
     }
 }

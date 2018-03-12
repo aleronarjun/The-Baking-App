@@ -114,6 +114,36 @@ public class NetworkUtils {
         return names;
     }
 
+    private static ArrayList<RecipeIngredients> parseResponseForIngredients (String JSONResponse, int id){
+        if (TextUtils.isEmpty(JSONResponse)) {
+            return null;
+        }
+
+        ArrayList<RecipeIngredients> ingredients = new ArrayList<>();
+
+        try {
+            JSONArray resultsArray = new JSONArray(JSONResponse);
+            JSONObject currentRecipe = resultsArray.getJSONObject(id-1);
+            JSONArray ingredientArray = currentRecipe.getJSONArray("ingredients");
+
+            for(int i = 0; i<ingredientArray.length(); i++){
+                JSONObject currentIng = ingredientArray.getJSONObject(i);
+                String quant = currentIng.getString("quantity");
+                String measure = currentIng.getString("measure");
+                String ingredient = currentIng.getString("ingredient");
+
+                RecipeIngredients thisRecipeIngredient = new RecipeIngredients(quant, measure, ingredient);
+                ingredients.add(thisRecipeIngredient);
+            }
+
+        } catch (JSONException e) {
+            Log.e("QueryUtils", "Problem parsing the JSON results", e);
+        }
+
+        return ingredients;
+
+    }
+
     public static ArrayList<RecipeName> networkReqForNames(String url) throws JSONException {
 
         Log.e(LOG_TAG, "onNetworkReq");
@@ -131,5 +161,24 @@ public class NetworkUtils {
         ArrayList<RecipeName> recipeNames = parseResponseForNames(jsonResponse);
 
         return recipeNames;
+    }
+
+    public static ArrayList<RecipeIngredients> networkReqForIngredients (String url, int id) throws JSONException{
+        Log.e(LOG_TAG, "onNetworkReqForIngredients");
+
+        URL URL = convertToURL(url);
+
+        String jsonResponse = null;
+
+        try {
+            jsonResponse = makeHTTPRequest(URL);
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        ArrayList<RecipeIngredients> recipeIngredients = parseResponseForIngredients(jsonResponse, id);
+
+        return recipeIngredients;
+
     }
 }
