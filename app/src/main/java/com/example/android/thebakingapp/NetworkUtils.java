@@ -144,6 +144,37 @@ public class NetworkUtils {
 
     }
 
+    private static ArrayList<RecipeSteps> parseResponseForAllSteps(String JSONResponse, int id){
+        if(TextUtils.isEmpty(JSONResponse)){
+            return null;
+        }
+
+        ArrayList<RecipeSteps> steps = new ArrayList<>();
+
+        try{
+            JSONArray resultsArray = new JSONArray(JSONResponse);
+            JSONObject currentRecipe = resultsArray.getJSONObject(id-1);
+            JSONArray stepsArray = currentRecipe.getJSONArray("ingredients");
+            for(int i = 0; i<stepsArray.length();i++){
+                JSONObject thisStep = stepsArray.getJSONObject(i);
+                int thisStepid = thisStep.getInt("id");
+                String shortDesc = thisStep.getString("shortDescription");
+                String desc = thisStep.getString("description");
+                String video = thisStep.getString("videoURL");
+                String thumb = thisStep.getString("thumbnailURL");
+                RecipeSteps currentSteps = new RecipeSteps(thisStepid, shortDesc, desc, video, thumb);
+                steps.add(currentSteps);
+            }
+
+        }
+
+        catch(JSONException e){
+            Log.e("QueryUtils", "Problem parsing the JSON results", e);
+        }
+
+        return steps;
+    }
+
     public static ArrayList<RecipeName> networkReqForNames(String url) throws JSONException {
 
         Log.e(LOG_TAG, "onNetworkReq");
@@ -179,6 +210,25 @@ public class NetworkUtils {
         ArrayList<RecipeIngredients> recipeIngredients = parseResponseForIngredients(jsonResponse, id);
 
         return recipeIngredients;
+
+    }
+
+    public static ArrayList<RecipeSteps> networkReqForAllSteps (String url, int id) throws JSONException{
+        Log.e(LOG_TAG, "networkReqForAllSteps");
+
+        URL URL = convertToURL(url);
+
+        String JSONResponse = null;
+
+        try{
+            JSONResponse = makeHTTPRequest(URL);
+        }
+        catch(IOException e){
+            Log.e(LOG_TAG, "Problem making the HTTP request.", e);
+        }
+
+        ArrayList<RecipeSteps> recipeSteps = parseResponseForAllSteps(JSONResponse, id);
+        return recipeSteps;
 
     }
 }

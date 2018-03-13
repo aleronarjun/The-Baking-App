@@ -86,7 +86,11 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
 
         @Override
         public void onClick(View view) {
-
+            int adapterPostion = getAdapterPosition();
+            if(recipeSteps!=null){
+                RecipeSteps thisRecipeSteps = recipeSteps.get(adapterPostion);
+                handler.onClick(thisRecipeSteps);
+            }
         }
     }
 }
