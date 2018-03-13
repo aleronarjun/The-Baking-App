@@ -44,7 +44,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
         View view = inflater.inflate(idForListItem, parent, shouldAttachToParentImmediately);
         return new IngredientAdapterViewHolder(view);
-
     }
 
     @Override
