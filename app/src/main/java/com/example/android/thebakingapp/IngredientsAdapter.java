@@ -58,7 +58,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         String currentRecipeMeasure = recipeIngredients.get(position).getMeasure();
         String currentRecipeQuant = recipeIngredients.get(position).getQuantity();
 
-        holder.ingName.setText(currentIngName);
+        holder.ingName.setText(currentIngName.toUpperCase());
         holder.ingMeasure.setText(currentRecipeMeasure);
         holder.ingQuant.setText(currentRecipeQuant);
 
