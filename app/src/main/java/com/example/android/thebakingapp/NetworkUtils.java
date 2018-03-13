@@ -154,9 +154,10 @@ public class NetworkUtils {
         try{
             JSONArray resultsArray = new JSONArray(JSONResponse);
             JSONObject currentRecipe = resultsArray.getJSONObject(id-1);
-            JSONArray stepsArray = currentRecipe.getJSONArray("ingredients");
+            JSONArray stepsArray = currentRecipe.getJSONArray("steps");
             for(int i = 0; i<stepsArray.length();i++){
                 JSONObject thisStep = stepsArray.getJSONObject(i);
+
                 int thisStepid = thisStep.getInt("id");
                 String shortDesc = thisStep.getString("shortDescription");
                 String desc = thisStep.getString("description");

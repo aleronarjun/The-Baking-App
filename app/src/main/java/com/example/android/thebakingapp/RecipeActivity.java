@@ -26,7 +26,9 @@ public class RecipeActivity extends AppCompatActivity {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
-            fragmentManager.beginTransaction().add(R.id.ing_steps_container, recipeFragment).commit();
+            fragmentManager.beginTransaction()
+                    .add(R.id.ing_steps_container, recipeFragment)
+                    .commit();
 
         }
     }
