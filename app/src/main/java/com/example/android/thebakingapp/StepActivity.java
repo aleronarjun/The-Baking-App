@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -27,6 +28,12 @@ public class StepActivity extends AppCompatActivity {
     @BindView(R.id.step_desc_long)
     TextView step_desc;
 
+    @BindView(R.id.prev_button)
+    Button prev_button;
+
+    @BindView(R.id.next_button)
+    Button next_button;
+
     ArrayList<Integer> allIDs;
     ArrayList<String> allDesc;
     ArrayList<String> allVid;
@@ -37,7 +44,6 @@ public class StepActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
-
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
@@ -51,7 +57,17 @@ public class StepActivity extends AppCompatActivity {
 
             step_desc.setText(allDesc.get(current));
 
+            if(current==(allIDs.size()-1)){
+                next_button.setVisibility(View.GONE);
+            }
+
+            if(current==0){
+                prev_button.setVisibility(View.GONE);
+            }
+
+
             if(!allVid.get(current).equals("")){
+
                 videoView.setVideoPath(allVid.get(current));
                 videoView.start();
                 stepThumb.setVisibility(View.GONE);
@@ -64,8 +80,9 @@ public class StepActivity extends AppCompatActivity {
 
             else{
                 videoView.setVisibility(View.GONE);
-
             }
+
+
         }
         catch(NullPointerException e)
         {
@@ -73,6 +90,63 @@ public class StepActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        prev_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setViews(false);
+            }
+        });
 
+        next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setViews(true);
+            }
+        });
+
+    }
+
+    private void setViews(Boolean next) {
+        next_button.setVisibility(View.VISIBLE);
+        prev_button.setVisibility(View.VISIBLE);
+
+        if(next)
+        current++;
+
+        if(!next)
+        current--;
+
+        if(current==(allIDs.size()-1)){
+            next_button.setVisibility(View.GONE);
+        }
+
+        if(current==0){
+            prev_button.setVisibility(View.GONE);
+        }
+
+        step_desc.setText(allDesc.get(current));
+
+        if (!allVid.get(current).equals("")) {
+            videoView.setVideoPath(allVid.get(current));
+            videoView.start();
+            stepThumb.setVisibility(View.GONE);
+            videoView.setVisibility(View.VISIBLE);
+        }
+
+        else if (!allThumb.get(current).equals("")) {
+            stepThumb.setVisibility(View.VISIBLE);
+            Picasso.with(this).load(allThumb.get(current)).into(stepThumb);
+            videoView.setVisibility(View.GONE);
+        }
+        else {
+            videoView.setVisibility(View.GONE);
+            stepThumb.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
