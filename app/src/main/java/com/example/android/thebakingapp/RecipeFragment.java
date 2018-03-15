@@ -29,6 +29,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
     Activity context;
     RecyclerView recyclerViewSteps;
     StepAdapter stepAdapter;
+    ArrayList<RecipeSteps> all_steps;
 
     public RecipeFragment(){
 
@@ -136,6 +137,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
             if (recipeSteps != null){
                 stepAdapter.setRecipeSteps(recipeSteps);
                 recyclerViewSteps.setAdapter(stepAdapter);
+                all_steps = recipeSteps;
             }
             else return;
         }
@@ -148,6 +150,34 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
     @Override
     public void onClick(RecipeSteps thisRecipeSteps) {
+        Intent intent = new Intent(context, StepActivity.class);
+        Bundle extras = new Bundle();
 
+        extras.putInt("THIS_ID", thisRecipeSteps.getId());
+        ArrayList<Integer> allIDs = new ArrayList<>();
+        ArrayList<String> allDesc = new ArrayList<>();
+        ArrayList<String> allVid = new ArrayList<>();
+        ArrayList<String> allThumb = new ArrayList<>();
+
+        for(int i=0;i<all_steps.size();i++){
+            allIDs.add(i,all_steps.get(i).getId());
+        }
+        for(int i=0;i<all_steps.size();i++){
+            allDesc.add(i,all_steps.get(i).getDescription());
+        }
+        for(int i=0;i<all_steps.size();i++){
+            allVid.add(i,all_steps.get(i).getVideoURL());
+        }
+        for(int i=0;i<all_steps.size();i++){
+            allThumb.add(i,all_steps.get(i).getThumbURL());
+        }
+
+        extras.putIntegerArrayList("ALL_IDS",  allIDs );
+        extras.putStringArrayList("ALL_DESC", allDesc);
+        extras.putStringArrayList("ALL_VID", allVid);
+        extras.putStringArrayList("ALL_THUMB", allThumb);
+
+        intent.putExtras(extras);
+        startActivity(intent);
     }
 }
