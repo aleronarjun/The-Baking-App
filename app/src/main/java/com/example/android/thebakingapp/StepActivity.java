@@ -1,6 +1,7 @@
 package com.example.android.thebakingapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,7 +30,9 @@ import butterknife.ButterKnife;
 public class StepActivity extends AppCompatActivity {
     String LOG_TAG;
     @BindView(R.id.step_video)
-    VideoView videoView;
+    SimpleExoPlayerView videoView;
+
+    SimpleExoPlayer player;
 
     @BindView(R.id.step_thumb)
     ImageView stepThumb;
@@ -39,6 +51,9 @@ public class StepActivity extends AppCompatActivity {
     ArrayList<String> allVid;
     ArrayList<String> allThumb;
     int current;
+    int currentWindow = 0;
+    long playbackPosition = 0;
+    Boolean playWhenReady = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +82,7 @@ public class StepActivity extends AppCompatActivity {
 
 
             if(!allVid.get(current).equals("")){
-
-                videoView.setVideoPath(allVid.get(current));
-                videoView.start();
+                initializePlayer();
                 stepThumb.setVisibility(View.GONE);
             }
 
@@ -106,6 +119,38 @@ public class StepActivity extends AppCompatActivity {
 
     }
 
+
+    private void initializePlayer() {
+        player = ExoPlayerFactory.newSimpleInstance(
+                new DefaultRenderersFactory(this),
+                new DefaultTrackSelector(), new DefaultLoadControl());
+
+        videoView.setPlayer(player);
+
+        player.setPlayWhenReady(playWhenReady);
+        player.seekTo(currentWindow, playbackPosition);
+
+        Uri uri = Uri.parse(allVid.get(current));
+        MediaSource mediaSource = buildMediaSource(uri);
+        player.prepare(mediaSource, true, false);
+    }
+
+    private MediaSource buildMediaSource(Uri uri) {
+        return new ExtractorMediaSource.Factory(
+                new DefaultHttpDataSourceFactory("exoplayer-codelab")).
+                createMediaSource(uri);
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            playWhenReady = player.getPlayWhenReady();
+            player.release();
+            player = null;
+        }
+    }
+
     private void setViews(Boolean next) {
         next_button.setVisibility(View.VISIBLE);
         prev_button.setVisibility(View.VISIBLE);
@@ -127,8 +172,7 @@ public class StepActivity extends AppCompatActivity {
         step_desc.setText(allDesc.get(current));
 
         if (!allVid.get(current).equals("")) {
-            videoView.setVideoPath(allVid.get(current));
-            videoView.start();
+            initializePlayer();
             stepThumb.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
         }
@@ -148,5 +192,19 @@ public class StepActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        initializePlayer();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releasePlayer();
     }
 }
