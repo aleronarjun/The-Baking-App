@@ -2,6 +2,7 @@ package com.example.android.thebakingapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,7 +61,10 @@ public class StepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step);
         ButterKnife.bind(this);
-
+        if(savedInstanceState!=null){
+            currentWindow = savedInstanceState.getInt("EXO_WIN");
+            playbackPosition = savedInstanceState.getLong("EXO_POS");
+        }
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         try {
@@ -127,6 +131,7 @@ public class StepActivity extends AppCompatActivity {
 
         videoView.setPlayer(player);
 
+
         player.setPlayWhenReady(playWhenReady);
         player.seekTo(currentWindow, playbackPosition);
 
@@ -190,21 +195,72 @@ public class StepActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putInt("EXO_WIN", currentWindow);
+        outState.putLong("EXO_POS", playbackPosition);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentWindow = savedInstanceState.getInt("EXO_WIN");
+        playbackPosition = savedInstanceState.getLong("EXO_POS");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle extras = getIntent().getExtras();
+
+        if(extras!=null){
+            currentWindow = extras.getInt("EXO_WIN");
+            playbackPosition = extras.getLong("EXO_POS");
+        }
+        initializePlayer();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Bundle extras = getIntent().getExtras();
+
+        if(extras!=null){
+            currentWindow = extras.getInt("EXO_WIN");
+            playbackPosition = extras.getLong("EXO_POS");
+        }
+        initializePlayer();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        initializePlayer();
+        Bundle extras = getIntent().getExtras();
 
+        if(extras!=null){
+            currentWindow = extras.getInt("EXO_WIN");
+            playbackPosition = extras.getLong("EXO_POS");
+        }
+        initializePlayer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        Bundle extras = new Bundle();
+        extras.putInt("EXO_WIN", currentWindow);
+        extras.putLong("EXO_POS", playbackPosition);
+        getIntent().putExtras(extras);
         releasePlayer();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        Bundle extras = new Bundle();
+        extras.putInt("EXO_WIN", currentWindow);
+        extras.putLong("EXO_POS", playbackPosition);
+        getIntent().putExtras(extras);
         releasePlayer();
     }
 }
