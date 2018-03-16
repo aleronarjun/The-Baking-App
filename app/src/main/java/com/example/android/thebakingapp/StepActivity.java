@@ -133,6 +133,7 @@ public class StepActivity extends AppCompatActivity {
 
 
         player.setPlayWhenReady(playWhenReady);
+        playbackPosition = player.getCurrentPosition();
         player.seekTo(currentWindow, playbackPosition);
 
         Uri uri = Uri.parse(allVid.get(current));

@@ -1,20 +1,37 @@
 package com.example.android.thebakingapp;
 
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.android.thebakingapp.Utils.NetworkUtils;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RecipeActivity extends AppCompatActivity {
+
+
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
+        ButterKnife.bind(this);
+
 
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        int id = extras.getInt("RECIPE_ID");
+        id = extras.getInt("RECIPE_ID");
 
         Bundle bundle=new Bundle();
         bundle.putInt("RECIPE_ID", id);
@@ -31,5 +48,8 @@ public class RecipeActivity extends AppCompatActivity {
                     .commit();
 
         }
+
     }
+
+
 }
