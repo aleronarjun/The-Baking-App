@@ -1,7 +1,11 @@
-package com.example.android.thebakingapp;
+package com.example.android.thebakingapp.Utils;
 
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.example.android.thebakingapp.RecipeIngredients;
+import com.example.android.thebakingapp.RecipeName;
+import com.example.android.thebakingapp.RecipeSteps;
 
 import org.json.JSONArray;
 import org.json.JSONException;

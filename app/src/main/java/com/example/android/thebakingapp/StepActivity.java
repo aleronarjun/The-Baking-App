@@ -52,8 +52,8 @@ public class StepActivity extends AppCompatActivity {
     ArrayList<String> allVid;
     ArrayList<String> allThumb;
     int current;
-    int currentWindow = 0;
-    long playbackPosition = 0;
+    int currentWindow;
+    long playbackPosition;
     Boolean playWhenReady = false;
 
     @Override
@@ -142,7 +142,7 @@ public class StepActivity extends AppCompatActivity {
 
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory("exoplayer-codelab")).
+                new DefaultHttpDataSourceFactory("exoplayer")).
                 createMediaSource(uri);
     }
 
@@ -196,8 +196,8 @@ public class StepActivity extends AppCompatActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putInt("EXO_WIN", currentWindow);
-        outState.putLong("EXO_POS", playbackPosition);
+        outState.putInt("EXO_WIN", player.getCurrentWindowIndex());
+        outState.putLong("EXO_POS", player.getCurrentPosition());
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
@@ -248,8 +248,8 @@ public class StepActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Bundle extras = new Bundle();
-        extras.putInt("EXO_WIN", currentWindow);
-        extras.putLong("EXO_POS", playbackPosition);
+        extras.putInt("EXO_WIN", player.getCurrentWindowIndex());
+        extras.putLong("EXO_POS", player.getCurrentWindowIndex());
         getIntent().putExtras(extras);
         releasePlayer();
     }
@@ -257,10 +257,12 @@ public class StepActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Bundle extras = new Bundle();
-        extras.putInt("EXO_WIN", currentWindow);
-        extras.putLong("EXO_POS", playbackPosition);
-        getIntent().putExtras(extras);
-        releasePlayer();
+        if(player!=null) {
+            Bundle extras = new Bundle();
+            extras.putInt("EXO_WIN", player.getCurrentWindowIndex());
+            extras.putLong("EXO_POS", player.getCurrentWindowIndex());
+            getIntent().putExtras(extras);
+            releasePlayer();
+        }
     }
 }

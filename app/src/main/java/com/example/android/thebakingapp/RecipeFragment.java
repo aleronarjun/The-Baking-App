@@ -14,9 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import com.example.android.thebakingapp.Utils.NetworkUtils;
 
-import butterknife.BindView;
+import java.util.ArrayList;
 
 /**
  * Created by Arjun Vidyarthi on 10-Mar-18.
