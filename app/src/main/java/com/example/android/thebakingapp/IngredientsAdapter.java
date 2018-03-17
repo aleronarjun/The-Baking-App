@@ -23,6 +23,10 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     private final IngredientAdapterOnClickHandler handler;
     private Context activity_context;
 
+    public ArrayList<RecipeIngredients> getList(){
+        return recipeIngredients;
+    }
+
     public IngredientsAdapter(Context context, IngredientAdapterOnClickHandler handler){
         this.handler = handler;
         activity_context = context;

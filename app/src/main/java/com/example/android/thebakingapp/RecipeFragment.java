@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.android.thebakingapp.Utils.NetworkUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +36,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
     RecyclerView recyclerViewSteps;
     StepAdapter stepAdapter;
     ArrayList<RecipeSteps> all_steps;
+    int id;
 
     @BindView(R.id.floatingActionButton2)
     FloatingActionButton fab;
@@ -68,7 +70,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         recyclerViewSteps.setLayoutManager(layoutManager1);
         stepAdapter = new StepAdapter(rootView.getContext(), RecipeFragment.this);
 
-        int id = getArguments().getInt("RECIPE_ID");
+        id = getArguments().getInt("RECIPE_ID");
         final String[] args = {"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json", String.valueOf(id)};
         new IngredientAsyncTask().execute(args);
         new StepsAsyncTask().execute(args);
@@ -76,53 +78,85 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new onlyIngredientsTask().execute(args);
+                RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
+                ArrayList<RecipeIngredients> ings= adapter.getList();
+                String ing = "";
+                for(int i = 0;i<ings.size();i++){
+                    ing = ing.concat(ings.get(i).getIngredient() + ", ");                }
+
+                String name = "";
+                if(id == 1){
+                    name = "Nutella Pie";
+                }
+                else if(id==2){
+                    name = "Brownies";
+                }
+                else if(id==3){
+                    name = "Yellow cake";
+                }
+                else if(id==4){
+                    name = "Cheesecake";
+                }
+                long id = 1;
+                RecipeAndIngredient recipeAndIngredient = new RecipeAndIngredient(name, ing);
+                recipeAndIngredient.save();
+                //RecipeAndIngredient recipeAndIngredient1 = RecipeAndIngredient.findById(RecipeAndIngredient.class, id);
+
+                List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
+                if(list.get(0)!=null) {
+                    Toast.makeText(getActivity(), "SAVED TO WIDGET!" + list.get(0).ingredients, Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(getActivity(), "ERROR SAVING TO WIDGET!", Toast.LENGTH_SHORT).show();
+                //new onlyIngredientsTask().execute(args);
             }
         });
 
         return rootView;
     }
 
-    private class onlyIngredientsTask extends AsyncTask<String, Void, RecipeAndIngredient>{
-
-        @Override
-        protected RecipeAndIngredient doInBackground(String... strings) {
-            if(strings.length==0){
-                return null;
-            }
-
-            String URL = strings[0];
-            int id = Integer.parseInt(strings[1]);
-
-            try{
-
-                ArrayList<RecipeIngredients> ings =  NetworkUtils.networkReqForIngredients(URL, id);
-                ArrayList<RecipeName> names = NetworkUtils.networkReqForNames(URL);
-                String name = names.get(id-1).getName();
-                String ing = "";
-                for(int i =0;i<ings.size()-1; i++){
-                    ing.concat(ings.get(i).getIngredient() + ", ");
-                }
-                ing.concat(ings.get(ings.size()-1).getIngredient() + ".");
-                return new RecipeAndIngredient(name, ing);
-
-            }
-            catch(Exception e){
-                e.printStackTrace();
-                return null;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(RecipeAndIngredient recipeAndIngredient) {
-            RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
-            recipeAndIngredient.save();
-            Toast.makeText(getActivity(), "SAVED IN WIDGET!", Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-
+//    private class onlyIngredientsTask extends AsyncTask<String, Void, RecipeAndIngredient>{
+//
+//        @Override
+//        protected RecipeAndIngredient doInBackground(String... strings) {
+//            if(strings.length==0){
+//                return null;
+//            }
+//
+//            String URL = strings[0];
+//            int id = Integer.parseInt(strings[1]);
+//
+//            try{
+//
+//                ArrayList<RecipeIngredients> ings =  NetworkUtils.networkReqForIngredients(URL, id);
+//                ArrayList<RecipeName> names = NetworkUtils.networkReqForNames(URL);
+//                String name = names.get(id-1).getName();
+//                String ing = null;
+//                for(int i =0;i<ings.size(); i++){
+//                    ing = ing.concat(ings.get(i).getIngredient() + ", ");
+//                }
+//
+//                RecipeAndIngredient recipeAndIngredient = new RecipeAndIngredient(name, ing);
+//                return recipeAndIngredient;
+//
+//            }
+//            catch(Exception e){
+//                e.printStackTrace();
+//                return null;
+//            }
+//        }
+//
+//        @Override
+//        protected void onPostExecute(RecipeAndIngredient recipeAndIngredient) {
+//            if(recipeAndIngredient==null){
+//                Toast.makeText(getActivity(), "recipeAndIng is null", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
+//            recipeAndIngredient.save();
+//            Toast.makeText(getActivity(), "SAVED IN WIDGET!", Toast.LENGTH_SHORT).show();
+//
+//        }
+//    }
 
     private class IngredientAsyncTask extends AsyncTask<String, Void, ArrayList<RecipeIngredients>>{
 

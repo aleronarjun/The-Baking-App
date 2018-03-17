@@ -5,12 +5,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 
+import java.util.List;
+
 /**
  * Implementation of App Widget functionality.
  */
 public class RecipeWidget extends AppWidgetProvider {
-    static long id = 1;
-    static RecipeAndIngredient recipeAndIngredient = RecipeAndIngredient.findById(RecipeAndIngredient.class, id);
+    static long id = 0;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -18,17 +19,18 @@ public class RecipeWidget extends AppWidgetProvider {
         //CharSequence widgetText = context.getString(R.string.appwidget_text);
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
-        //views.setTextViewText(R.id.appwidget_text, widgetText);
+        List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
+        RecipeAndIngredient recipeAndIngredient = list.get(0);
+        views.setTextViewText(R.id.wid_name, recipeAndIngredient.title);
+        views.setTextViewText(R.id.wid_ing, recipeAndIngredient.ingredients);
 
-        if(recipeAndIngredient!=null) {
-            views.setTextViewText(R.id.wid_name, recipeAndIngredient.title);
-            views.setTextViewText(R.id.wid_ing, recipeAndIngredient.ingredients);
-        }
-        else {
-            views.setTextViewText(R.id.wid_name, "Nothing in DB");
-            views.setTextViewText(R.id.wid_ing, "Add to DB to see recipe name and ingredients here!");
-        }
+//        else {
+//            views.setTextViewText(R.id.wid_name, "Nothing in DB");
+//            views.setTextViewText(R.id.wid_ing, "Add to DB to see recipe name and ingredients here!");
+//        }
         // Instruct the widget manager to update the widget
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_ing);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_name);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
@@ -43,6 +45,7 @@ public class RecipeWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         // Enter relevant functionality for when the first widget is created
+
     }
 
     @Override

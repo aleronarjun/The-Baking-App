@@ -23,6 +23,10 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
     private final StepAdapterOnClickHandler handler;
     private Context activity_context;
 
+    public ArrayList<RecipeSteps> getList(){
+        return recipeSteps;
+    }
+
     public StepAdapter (Context context, StepAdapterOnClickHandler handler){
         this.handler = handler;
         activity_context = context;
