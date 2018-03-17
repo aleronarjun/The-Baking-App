@@ -115,13 +115,8 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
         @Override
         protected void onPostExecute(RecipeAndIngredient recipeAndIngredient) {
-            RecipeAndIngredient test;
-            test = RecipeAndIngredient.findById(RecipeAndIngredient.class, Long.valueOf(1));
-            if(test!=null) {
-                test.delete();
-            }
-            RecipeAndIngredient recipeAndIngredient1 = new RecipeAndIngredient(recipeAndIngredient.title, recipeAndIngredient.ingredients);
-            recipeAndIngredient1.save();
+            RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
+            recipeAndIngredient.save();
             Toast.makeText(getActivity(), "SAVED IN WIDGET!", Toast.LENGTH_SHORT).show();
 
         }
