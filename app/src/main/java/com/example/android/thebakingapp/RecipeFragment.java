@@ -2,6 +2,8 @@ package com.example.android.thebakingapp;
 
 
 import android.app.Activity;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -14,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.example.android.thebakingapp.Utils.NetworkUtils;
@@ -81,8 +84,10 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
                 RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
                 ArrayList<RecipeIngredients> ings= adapter.getList();
                 String ing = "";
-                for(int i = 0;i<ings.size();i++){
-                    ing = ing.concat(ings.get(i).getIngredient() + ", ");                }
+                for(int i = 0;i<ings.size()-1;i++){
+                    ing = ing.concat(ings.get(i).getIngredient() + ", ");
+                }
+                ing = ing.concat(ings.get(ings.size()-1).getIngredient()+ ".");
 
                 String name = "";
                 if(id == 1){
@@ -104,59 +109,23 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
                 List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
                 if(list.get(0)!=null) {
-                    Toast.makeText(getActivity(), "SAVED TO WIDGET!" + list.get(0).ingredients, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "SAVED TO WIDGET!", Toast.LENGTH_SHORT).show();
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+                    RemoteViews remoteViews = new RemoteViews(getContext().getPackageName(), R.layout.recipe_widget);
+                    ComponentName thisWidget = new ComponentName(getContext(), RecipeWidget.class);
+                    remoteViews.setTextViewText(R.id.wid_name, list.get(0).title);
+                    remoteViews.setTextViewText(R.id.wid_ing, list.get(0).ingredients);
+                    appWidgetManager.updateAppWidget(thisWidget, remoteViews);
                 }
                 else Toast.makeText(getActivity(), "ERROR SAVING TO WIDGET!", Toast.LENGTH_SHORT).show();
-                //new onlyIngredientsTask().execute(args);
+
             }
         });
 
         return rootView;
     }
 
-//    private class onlyIngredientsTask extends AsyncTask<String, Void, RecipeAndIngredient>{
-//
-//        @Override
-//        protected RecipeAndIngredient doInBackground(String... strings) {
-//            if(strings.length==0){
-//                return null;
-//            }
-//
-//            String URL = strings[0];
-//            int id = Integer.parseInt(strings[1]);
-//
-//            try{
-//
-//                ArrayList<RecipeIngredients> ings =  NetworkUtils.networkReqForIngredients(URL, id);
-//                ArrayList<RecipeName> names = NetworkUtils.networkReqForNames(URL);
-//                String name = names.get(id-1).getName();
-//                String ing = null;
-//                for(int i =0;i<ings.size(); i++){
-//                    ing = ing.concat(ings.get(i).getIngredient() + ", ");
-//                }
-//
-//                RecipeAndIngredient recipeAndIngredient = new RecipeAndIngredient(name, ing);
-//                return recipeAndIngredient;
-//
-//            }
-//            catch(Exception e){
-//                e.printStackTrace();
-//                return null;
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(RecipeAndIngredient recipeAndIngredient) {
-//            if(recipeAndIngredient==null){
-//                Toast.makeText(getActivity(), "recipeAndIng is null", Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-//            RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
-//            recipeAndIngredient.save();
-//            Toast.makeText(getActivity(), "SAVED IN WIDGET!", Toast.LENGTH_SHORT).show();
-//
-//        }
-//    }
+
 
     private class IngredientAsyncTask extends AsyncTask<String, Void, ArrayList<RecipeIngredients>>{
 

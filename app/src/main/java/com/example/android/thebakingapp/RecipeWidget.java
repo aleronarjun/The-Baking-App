@@ -11,7 +11,7 @@ import java.util.List;
  * Implementation of App Widget functionality.
  */
 public class RecipeWidget extends AppWidgetProvider {
-    static long id = 0;
+    long id = 0;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -20,17 +20,17 @@ public class RecipeWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
         List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
-        RecipeAndIngredient recipeAndIngredient = list.get(0);
-        views.setTextViewText(R.id.wid_name, recipeAndIngredient.title);
-        views.setTextViewText(R.id.wid_ing, recipeAndIngredient.ingredients);
-
+        if(list.size()!=0) {
+            views.setTextViewText(R.id.wid_name, list.get(0).title);
+            views.setTextViewText(R.id.wid_ing, list.get(0).ingredients);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_ing);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_name);
+        }
 //        else {
 //            views.setTextViewText(R.id.wid_name, "Nothing in DB");
 //            views.setTextViewText(R.id.wid_ing, "Add to DB to see recipe name and ingredients here!");
 //        }
         // Instruct the widget manager to update the widget
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_ing);
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_name);
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
