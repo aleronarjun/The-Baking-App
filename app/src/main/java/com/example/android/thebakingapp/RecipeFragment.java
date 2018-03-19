@@ -40,6 +40,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
     StepAdapter stepAdapter;
     ArrayList<RecipeSteps> all_steps;
     int id;
+    Boolean twoPane;
 
     @BindView(R.id.floatingActionButton2)
     FloatingActionButton fab;
@@ -72,8 +73,17 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(rootView.getContext());
         recyclerViewSteps.setLayoutManager(layoutManager1);
         stepAdapter = new StepAdapter(rootView.getContext(), RecipeFragment.this);
-
-        id = getArguments().getInt("RECIPE_ID");
+        twoPane = true;
+        try{
+            twoPane =getArguments().getBoolean("TWO_PANE");
+        }catch (NullPointerException e){
+            twoPane = false;
+        }
+        try {
+                id = getArguments().getInt("RECIPE_ID");
+            }catch (NullPointerException e){
+                id = 1;
+            }
         final String[] args = {"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json", String.valueOf(id)};
         new IngredientAsyncTask().execute(args);
         new StepsAsyncTask().execute(args);

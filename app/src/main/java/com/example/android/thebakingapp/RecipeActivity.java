@@ -21,6 +21,7 @@ public class RecipeActivity extends AppCompatActivity {
 
 
     int id;
+    Boolean twoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,11 @@ public class RecipeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         id = extras.getInt("RECIPE_ID");
+        twoPane = extras.getBoolean("TWO_PANE");
 
         Bundle bundle=new Bundle();
         bundle.putInt("RECIPE_ID", id);
+        bundle.putBoolean("TWO_PANE", twoPane);
 
         RecipeFragment recipeFragment = new RecipeFragment();
         recipeFragment.setArguments(bundle);
