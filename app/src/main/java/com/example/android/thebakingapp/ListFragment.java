@@ -92,25 +92,34 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
 
     @Override
     public void onClick(RecipeName thisRecipe) {
-        if(MainActivity.twoPane==false) {
+        try {
+            if (MainActivity.twoPane == false) {
+                Intent intent = new Intent(context, RecipeActivity.class);
+                Bundle extras = new Bundle();
+
+                extras.putInt("RECIPE_ID", thisRecipe.getId());
+                extras.putBoolean("TWO_PANE", MainActivity.twoPane);
+                intent.putExtras(extras);
+                getActivity().startActivity(intent);
+            } else {
+                RecipeFragment recipeFragment = new RecipeFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("RECIPE_ID", thisRecipe.getId());
+                bundle.putBoolean("TWO_PANE", MainActivity.twoPane);
+                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
+                recipeFragment.setArguments(bundle);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.steps_ing_container, recipeFragment);
+                fragmentTransaction.commit();
+            }
+        }catch (NullPointerException e){
             Intent intent = new Intent(context, RecipeActivity.class);
             Bundle extras = new Bundle();
 
             extras.putInt("RECIPE_ID", thisRecipe.getId());
-            extras.putBoolean("TWO_PANE", MainActivity.twoPane);
+            extras.putBoolean("TWO_PANE", false);
             intent.putExtras(extras);
             getActivity().startActivity(intent);
-        }
-        else{
-            RecipeFragment recipeFragment = new RecipeFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt("RECIPE_ID", thisRecipe.getId());
-            bundle.putBoolean("TWO_PANE", MainActivity.twoPane);
-            FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-            recipeFragment.setArguments(bundle);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.replace(R.id.steps_ing_container,recipeFragment);
-            fragmentTransaction.commit();
         }
 
     }
