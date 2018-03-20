@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 
 /**
  * Created by Arjun Vidyarthi on 10-Mar-18.
@@ -67,11 +69,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
     }
 
     public class ListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.recipe_name)
         public TextView recipeName;
 
         public ListAdapterViewHolder(View itemView) {
             super(itemView);
-            recipeName = itemView.findViewById(R.id.recipe_name);
             itemView.setOnClickListener(this);
         }
 
