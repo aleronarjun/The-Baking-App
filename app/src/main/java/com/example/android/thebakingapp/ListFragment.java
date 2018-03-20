@@ -28,7 +28,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
     ListAdapter adapter;
     Activity context;
 
-    public ListFragment(){
+    public ListFragment() {
 
     }
 
@@ -47,14 +47,14 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
         recyclerView.setHasFixedSize(false);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new ListAdapter(rootView.getContext(), ListFragment.this );
+        adapter = new ListAdapter(rootView.getContext(), ListFragment.this);
         String[] URL = {"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json"};
         new RecipeAyncTask().execute(URL);
         return rootView;
 
     }
 
-    private class RecipeAyncTask extends AsyncTask<String, Void, ArrayList<RecipeName>>{
+    private class RecipeAyncTask extends AsyncTask<String, Void, ArrayList<RecipeName>> {
 
         @Override
         protected void onPreExecute() {
@@ -63,16 +63,15 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
 
         @Override
         protected ArrayList<RecipeName> doInBackground(String... strings) {
-            if(strings.length==0){
+            if (strings.length == 0) {
                 return null;
             }
 
             String URL = strings[0];
 
-            try{
+            try {
                 return NetworkUtils.networkReqForNames(URL);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 Log.e(LOG_TAG, "Error with AyncTask retrieval!");
                 e.printStackTrace();
                 return null;
@@ -81,11 +80,10 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
 
         @Override
         protected void onPostExecute(ArrayList<RecipeName> recipeNames) {
-           if (recipeNames != null){
-               adapter.setRecipeNames(recipeNames);
-               recyclerView.setAdapter(adapter);
-           }
-           else return;
+            if (recipeNames != null) {
+                adapter.setRecipeNames(recipeNames);
+                recyclerView.setAdapter(adapter);
+            } else return;
         }
 
     }
@@ -112,7 +110,7 @@ public class ListFragment extends android.support.v4.app.Fragment implements Lis
                 fragmentTransaction.replace(R.id.steps_ing_container, recipeFragment);
                 fragmentTransaction.commit();
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Intent intent = new Intent(context, RecipeActivity.class);
             Bundle extras = new Bundle();
 

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 
@@ -24,11 +25,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
         void onClick(RecipeName thisRecipe);
     }
 
-    public void setRecipeNames (ArrayList<RecipeName> names){
+    public void setRecipeNames(ArrayList<RecipeName> names) {
         recipeNames = names;
     }
 
-    public ListAdapter (Context context, ListAdapterOnClickHandler handler ){
+    public ListAdapter(Context context, ListAdapterOnClickHandler handler) {
         this.handler = handler;
         activity_context = context;
     }
@@ -47,7 +48,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
     @Override
     public void onBindViewHolder(ListAdapterViewHolder holder, int position) {
 
-        if(recipeNames == null){
+        if (recipeNames == null) {
             Log.e(LOG_TAG, "Recipe names are null!");
             return;
         }
@@ -58,8 +59,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
 
     @Override
     public int getItemCount() {
-        if(recipeNames == null){
-        return 1;
+        if (recipeNames == null) {
+            return 1;
         }
 
         return recipeNames.size();
@@ -77,7 +78,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            if(recipeNames!=null) {
+            if (recipeNames != null) {
                 RecipeName thisRecipeName = recipeNames.get(adapterPosition);
                 handler.onClick(thisRecipeName);
             }

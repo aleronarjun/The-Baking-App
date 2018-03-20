@@ -6,11 +6,12 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
     static Boolean twoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
 
             ListFragment listFragment = new ListFragment();
             RecipeFragment recipeFragment = new RecipeFragment();
@@ -18,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
 
 
             fragmentManager.beginTransaction().add(R.id.list_container, listFragment).commit();
-            if(findViewById(R.id.steps_ing_container)!=null){
+            if (findViewById(R.id.steps_ing_container) != null) {
                 twoPane = true;
-                fragmentManager.beginTransaction().add(R.id.steps_ing_container, recipeFragment ).commit();
+                fragmentManager.beginTransaction().add(R.id.steps_ing_container, recipeFragment).commit();
             }
 
         }

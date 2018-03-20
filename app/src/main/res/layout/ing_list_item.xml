@@ -11,7 +11,7 @@
         android:layout_margin="5dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="NAME"
+        android:text="@string/name"
         android:textSize="14sp" />
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_margin="1dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Q" />
+            android:text="@string/Q" />
 
         <TextView
             android:id="@+id/ing_unit"
@@ -36,7 +36,7 @@
             android:layout_margin="1dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="UNIT" />
+            android:text="@string/unit" />
     </LinearLayout>
 
 </LinearLayout>

@@ -23,22 +23,23 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     private final IngredientAdapterOnClickHandler handler;
     private Context activity_context;
 
-    public ArrayList<RecipeIngredients> getList(){
+    public ArrayList<RecipeIngredients> getList() {
         return recipeIngredients;
     }
 
-    public IngredientsAdapter(Context context, IngredientAdapterOnClickHandler handler){
+    public IngredientsAdapter(Context context, IngredientAdapterOnClickHandler handler) {
         this.handler = handler;
         activity_context = context;
     }
 
-    public interface IngredientAdapterOnClickHandler{
+    public interface IngredientAdapterOnClickHandler {
         void onClick(RecipeIngredients thisRecipeIngs);
     }
 
-    public void setRecipeIngredients (ArrayList<RecipeIngredients> ings){
+    public void setRecipeIngredients(ArrayList<RecipeIngredients> ings) {
         recipeIngredients = ings;
     }
+
     @Override
     public IngredientsAdapter.IngredientAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -52,7 +53,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public void onBindViewHolder(IngredientsAdapter.IngredientAdapterViewHolder holder, int position) {
-        if(recipeIngredients == null){
+        if (recipeIngredients == null) {
             Log.e(LOG_TAG, "Recipe names are null!");
             return;
         }
@@ -69,8 +70,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
 
     @Override
     public int getItemCount() {
-        if(recipeIngredients==null)
-        return 0;
+        if (recipeIngredients == null)
+            return 0;
 
         return recipeIngredients.size();
     }
@@ -97,7 +98,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
-            if(recipeIngredients!=null){
+            if (recipeIngredients != null) {
                 RecipeIngredients thisRecipeIng = recipeIngredients.get(adapterPosition);
                 handler.onClick(thisRecipeIng);
             }

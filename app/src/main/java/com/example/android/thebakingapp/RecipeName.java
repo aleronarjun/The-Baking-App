@@ -8,16 +8,16 @@ public class RecipeName {
     int id;
     String name;
 
-    public RecipeName(int id, String name){
+    public RecipeName(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

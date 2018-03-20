@@ -20,17 +20,12 @@ public class RecipeWidget extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget);
         List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
-        if(list.size()!=0) {
+        if (list.size() != 0) {
             views.setTextViewText(R.id.wid_name, list.get(0).title);
             views.setTextViewText(R.id.wid_ing, list.get(0).ingredients);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_ing);
             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.wid_name);
         }
-//        else {
-//            views.setTextViewText(R.id.wid_name, "Nothing in DB");
-//            views.setTextViewText(R.id.wid_ing, "Add to DB to see recipe name and ingredients here!");
-//        }
-        // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 

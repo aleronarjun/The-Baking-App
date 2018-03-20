@@ -11,11 +11,11 @@ public class RecipeAndIngredient extends SugarRecord<RecipeAndIngredient> {
     String title;
     String ingredients;
 
-    public RecipeAndIngredient(){
+    public RecipeAndIngredient() {
 
     }
 
-    public RecipeAndIngredient(String title, String ingredients){
+    public RecipeAndIngredient(String title, String ingredients) {
         this.title = title;
         this.ingredients = ingredients;
     }

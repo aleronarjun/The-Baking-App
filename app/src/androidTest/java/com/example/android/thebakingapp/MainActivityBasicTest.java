@@ -22,10 +22,10 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class MainActivityBasicTest {
     @Rule
     public ActivityTestRule<MainActivity> mainActivityActivityTestRule =
-              new ActivityTestRule<>(MainActivity.class);
+            new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void checkRecyclerView(){
+    public void checkRecyclerView() {
         Espresso.onView(withId(R.id.recycler_list)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
 
         Espresso.onView(withId(R.id.steps_list)).check(matches(ViewMatchers.isDisplayed()));

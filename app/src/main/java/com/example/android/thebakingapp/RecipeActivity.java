@@ -35,14 +35,14 @@ public class RecipeActivity extends AppCompatActivity {
         id = extras.getInt("RECIPE_ID");
         twoPane = extras.getBoolean("TWO_PANE");
 
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         bundle.putInt("RECIPE_ID", id);
         bundle.putBoolean("TWO_PANE", twoPane);
 
         RecipeFragment recipeFragment = new RecipeFragment();
         recipeFragment.setArguments(bundle);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 

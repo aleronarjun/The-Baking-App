@@ -11,7 +11,7 @@ public class RecipeSteps {
     private String videoURL;
     private String thumbURL;
 
-    public RecipeSteps(int id, String shortDesc, String description, String videoURL, String thumbURL){
+    public RecipeSteps(int id, String shortDesc, String description, String videoURL, String thumbURL) {
         this.id = id;
         this.shortDesc = shortDesc;
         this.description = description;

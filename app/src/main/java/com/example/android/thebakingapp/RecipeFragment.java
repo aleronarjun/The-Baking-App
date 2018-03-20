@@ -45,7 +45,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
     @BindView(R.id.floatingActionButton2)
     FloatingActionButton fab;
 
-    public RecipeFragment(){
+    public RecipeFragment() {
 
     }
 
@@ -66,7 +66,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext());
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new IngredientsAdapter(rootView.getContext(), RecipeFragment.this );
+        adapter = new IngredientsAdapter(rootView.getContext(), RecipeFragment.this);
 
         recyclerViewSteps = (RecyclerView) rootView.findViewById(R.id.steps_list);
         recyclerViewSteps.setHasFixedSize(true);
@@ -74,16 +74,16 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         recyclerViewSteps.setLayoutManager(layoutManager1);
         stepAdapter = new StepAdapter(rootView.getContext(), RecipeFragment.this);
         twoPane = true;
-        try{
-            twoPane =getArguments().getBoolean("TWO_PANE");
-        }catch (NullPointerException e){
+        try {
+            twoPane = getArguments().getBoolean("TWO_PANE");
+        } catch (NullPointerException e) {
             twoPane = false;
         }
         try {
-                id = getArguments().getInt("RECIPE_ID");
-            }catch (NullPointerException e){
-                id = 1;
-            }
+            id = getArguments().getInt("RECIPE_ID");
+        } catch (NullPointerException e) {
+            id = 1;
+        }
         final String[] args = {"https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json", String.valueOf(id)};
         new IngredientAsyncTask().execute(args);
         new StepsAsyncTask().execute(args);
@@ -92,24 +92,21 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
             @Override
             public void onClick(View view) {
                 RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
-                ArrayList<RecipeIngredients> ings= adapter.getList();
+                ArrayList<RecipeIngredients> ings = adapter.getList();
                 String ing = "";
-                for(int i = 0;i<ings.size()-1;i++){
+                for (int i = 0; i < ings.size() - 1; i++) {
                     ing = ing.concat(ings.get(i).getIngredient() + ", ");
                 }
-                ing = ing.concat(ings.get(ings.size()-1).getIngredient()+ ".");
+                ing = ing.concat(ings.get(ings.size() - 1).getIngredient() + ".");
 
                 String name = "";
-                if(id == 1){
+                if (id == 1) {
                     name = "Nutella Pie";
-                }
-                else if(id==2){
+                } else if (id == 2) {
                     name = "Brownies";
-                }
-                else if(id==3){
+                } else if (id == 3) {
                     name = "Yellow cake";
-                }
-                else if(id==4){
+                } else if (id == 4) {
                     name = "Cheesecake";
                 }
                 long id = 1;
@@ -118,7 +115,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
                 //RecipeAndIngredient recipeAndIngredient1 = RecipeAndIngredient.findById(RecipeAndIngredient.class, id);
 
                 List<RecipeAndIngredient> list = RecipeAndIngredient.listAll(RecipeAndIngredient.class);
-                if(list.get(0)!=null) {
+                if (list.get(0) != null) {
                     Toast.makeText(getActivity(), "SAVED TO WIDGET!", Toast.LENGTH_SHORT).show();
                     AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
                     RemoteViews remoteViews = new RemoteViews(getContext().getPackageName(), R.layout.recipe_widget);
@@ -126,8 +123,8 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
                     remoteViews.setTextViewText(R.id.wid_name, list.get(0).title);
                     remoteViews.setTextViewText(R.id.wid_ing, list.get(0).ingredients);
                     appWidgetManager.updateAppWidget(thisWidget, remoteViews);
-                }
-                else Toast.makeText(getActivity(), "ERROR SAVING TO WIDGET!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getActivity(), "ERROR SAVING TO WIDGET!", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -136,8 +133,7 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
     }
 
 
-
-    private class IngredientAsyncTask extends AsyncTask<String, Void, ArrayList<RecipeIngredients>>{
+    private class IngredientAsyncTask extends AsyncTask<String, Void, ArrayList<RecipeIngredients>> {
 
         @Override
         protected void onPreExecute() {
@@ -146,18 +142,17 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
         @Override
         protected ArrayList<RecipeIngredients> doInBackground(String... strings) {
-            if(strings.length==0){
+            if (strings.length == 0) {
                 return null;
             }
 
             String URL = strings[0];
             int id = Integer.parseInt(strings[1]);
 
-            try{
+            try {
 
                 return NetworkUtils.networkReqForIngredients(URL, id);
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 Log.e(LOG_TAG, "Error with AyncTask retrieval!");
                 e.printStackTrace();
                 return null;
@@ -166,15 +161,14 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
         @Override
         protected void onPostExecute(ArrayList<RecipeIngredients> recipeIngredients) {
-            if (recipeIngredients != null){
+            if (recipeIngredients != null) {
                 adapter.setRecipeIngredients(recipeIngredients);
                 recyclerView.setAdapter(adapter);
-            }
-            else return;
+            } else return;
         }
     }
 
-    private class StepsAsyncTask  extends AsyncTask<String, Void, ArrayList<RecipeSteps>>{
+    private class StepsAsyncTask extends AsyncTask<String, Void, ArrayList<RecipeSteps>> {
 
         @Override
         protected void onPreExecute() {
@@ -183,17 +177,16 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
         @Override
         protected ArrayList<RecipeSteps> doInBackground(String... strings) {
-            if(strings.length==0){
+            if (strings.length == 0) {
                 return null;
             }
 
             String URL = strings[0];
             int id = Integer.parseInt(strings[1]);
 
-            try{
+            try {
                 return NetworkUtils.networkReqForAllSteps(URL, id);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 Log.e(LOG_TAG, "Error with AyncTask retrieval!");
                 e.printStackTrace();
                 return null;
@@ -202,12 +195,11 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
 
         @Override
         protected void onPostExecute(ArrayList<RecipeSteps> recipeSteps) {
-            if (recipeSteps != null){
+            if (recipeSteps != null) {
                 stepAdapter.setRecipeSteps(recipeSteps);
                 recyclerViewSteps.setAdapter(stepAdapter);
                 all_steps = recipeSteps;
-            }
-            else return;
+            } else return;
         }
     }
 
@@ -227,20 +219,20 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         ArrayList<String> allVid = new ArrayList<>();
         ArrayList<String> allThumb = new ArrayList<>();
 
-        for(int i=0;i<all_steps.size();i++){
-            allIDs.add(i,all_steps.get(i).getId());
+        for (int i = 0; i < all_steps.size(); i++) {
+            allIDs.add(i, all_steps.get(i).getId());
         }
-        for(int i=0;i<all_steps.size();i++){
-            allDesc.add(i,all_steps.get(i).getDescription());
+        for (int i = 0; i < all_steps.size(); i++) {
+            allDesc.add(i, all_steps.get(i).getDescription());
         }
-        for(int i=0;i<all_steps.size();i++){
-            allVid.add(i,all_steps.get(i).getVideoURL());
+        for (int i = 0; i < all_steps.size(); i++) {
+            allVid.add(i, all_steps.get(i).getVideoURL());
         }
-        for(int i=0;i<all_steps.size();i++){
-            allThumb.add(i,all_steps.get(i).getThumbURL());
+        for (int i = 0; i < all_steps.size(); i++) {
+            allThumb.add(i, all_steps.get(i).getThumbURL());
         }
 
-        extras.putIntegerArrayList("ALL_IDS",  allIDs );
+        extras.putIntegerArrayList("ALL_IDS", allIDs);
         extras.putStringArrayList("ALL_DESC", allDesc);
         extras.putStringArrayList("ALL_VID", allVid);
         extras.putStringArrayList("ALL_THUMB", allThumb);

@@ -17,17 +17,17 @@ import butterknife.ButterKnife;
  * Created by Arjun Vidyarthi on 11-Mar-18.
  */
 
-public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterViewHolder>{
+public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterViewHolder> {
     private String LOG_TAG;
     private ArrayList<RecipeSteps> recipeSteps = null;
     private final StepAdapterOnClickHandler handler;
     private Context activity_context;
 
-    public ArrayList<RecipeSteps> getList(){
+    public ArrayList<RecipeSteps> getList() {
         return recipeSteps;
     }
 
-    public StepAdapter (Context context, StepAdapterOnClickHandler handler){
+    public StepAdapter(Context context, StepAdapterOnClickHandler handler) {
         this.handler = handler;
         activity_context = context;
     }
@@ -36,7 +36,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
         void onClick(RecipeSteps thisRecipeSteps);
     }
 
-    public void setRecipeSteps (ArrayList<RecipeSteps> steps){
+    public void setRecipeSteps(ArrayList<RecipeSteps> steps) {
         recipeSteps = steps;
     }
 
@@ -53,7 +53,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
 
     @Override
     public void onBindViewHolder(StepAdapter.StepAdapterViewHolder holder, int position) {
-        if(recipeSteps == null){
+        if (recipeSteps == null) {
             Log.e(LOG_TAG, "Recipe steps are null!");
             return;
         }
@@ -70,8 +70,8 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
 
     @Override
     public int getItemCount() {
-        if(recipeSteps==null)
-        return 0;
+        if (recipeSteps == null)
+            return 0;
 
         return recipeSteps.size();
     }
@@ -91,7 +91,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepAdapterVie
         @Override
         public void onClick(View view) {
             int adapterPostion = getAdapterPosition();
-            if(recipeSteps!=null){
+            if (recipeSteps != null) {
                 RecipeSteps thisRecipeSteps = recipeSteps.get(adapterPostion);
                 handler.onClick(thisRecipeSteps);
             }
