@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -91,7 +92,13 @@ public class RecipeFragment extends android.support.v4.app.Fragment implements I
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
+                try{
+                    RecipeAndIngredient.deleteAll(RecipeAndIngredient.class);
+                }catch(SQLiteException e)
+                {
+                    Log.e(LOG_TAG, "First time addition to DB");
+                }
+
                 ArrayList<RecipeIngredients> ings = adapter.getList();
                 String ing = "";
                 for (int i = 0; i < ings.size() - 1; i++) {
