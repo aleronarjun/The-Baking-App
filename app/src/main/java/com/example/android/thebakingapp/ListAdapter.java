@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 /**
@@ -70,10 +71,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
 
     public class ListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.recipe_name)
-        public TextView recipeName;
+        TextView recipeName;
 
         public ListAdapterViewHolder(View itemView) {
             super(itemView);
+
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
