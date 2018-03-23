@@ -7,6 +7,7 @@ package com.example.android.thebakingapp;
 public class RecipeName {
     int id;
     String name;
+    String imageURL = null;
 
     public RecipeName(int id, String name) {
         this.id = id;
@@ -19,5 +20,13 @@ public class RecipeName {
 
     public String getName() {
         return name;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getImageURL() {
+        return imageURL;
     }
 }

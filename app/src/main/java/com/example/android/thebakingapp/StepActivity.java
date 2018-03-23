@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -46,6 +47,9 @@ public class StepActivity extends AppCompatActivity {
     @BindView(R.id.next_button)
     Button next_button;
 
+    @BindView(R.id.scroll)
+    ScrollView scroll;
+
     ArrayList<Integer> allIDs;
     ArrayList<String> allDesc;
     ArrayList<String> allVid;
@@ -53,7 +57,7 @@ public class StepActivity extends AppCompatActivity {
     int current;
     int currentWindow;
     long playbackPosition;
-    Boolean playWhenReady = false;
+    Boolean playWhenReady = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +128,9 @@ public class StepActivity extends AppCompatActivity {
 
 
     private void initializePlayer() {
+        if(player!=null){
+            return;
+        }
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(this),
                 new DefaultTrackSelector(), new DefaultLoadControl());
@@ -132,7 +139,6 @@ public class StepActivity extends AppCompatActivity {
 
 
         player.setPlayWhenReady(playWhenReady);
-        playbackPosition = player.getCurrentPosition();
         player.seekTo(currentWindow, playbackPosition);
 
         Uri uri = Uri.parse(allVid.get(current));
@@ -194,18 +200,40 @@ public class StepActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putInt("EXO_WIN", player.getCurrentWindowIndex());
-        outState.putLong("EXO_POS", player.getCurrentPosition());
-        super.onSaveInstanceState(outState, outPersistentState);
+    private void saveState() {
+        if (player != null) {
+            playbackPosition = player.getCurrentPosition();
+            currentWindow = player.getCurrentWindowIndex();
+            playWhenReady = player.getPlayWhenReady();
+        }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        saveState();
+        outState.putInt("EXO_WIN", currentWindow);
+        outState.putLong("EXO_POS", playbackPosition);
+        outState.putBoolean("EXO_PLAY", playWhenReady);
+        outState.putIntArray("ARTICLE_SCROLL_POSITION",
+                new int[]{ scroll.getScrollX(), scroll.getScrollY()});
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentWindow = savedInstanceState.getInt("EXO_WIN");
         playbackPosition = savedInstanceState.getLong("EXO_POS");
+        playWhenReady = savedInstanceState.getBoolean("EXO_PLAY");
+        final int[] position = savedInstanceState.getIntArray("ARTICLE_SCROLL_POSITION");
+        if(position != null)
+            scroll.post(new Runnable() {
+                public void run() {
+                    scroll.scrollTo(position[0], position[1]);
+                }
+            });
     }
 
     @Override

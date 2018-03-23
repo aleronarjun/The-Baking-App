@@ -32,6 +32,7 @@
         <activity
             android:name=".RecipeActivity"
             android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".StepActivity"

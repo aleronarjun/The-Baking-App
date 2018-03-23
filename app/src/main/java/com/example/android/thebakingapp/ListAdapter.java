@@ -6,7 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -56,8 +59,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
             return;
         }
         String currentRecipeName = recipeNames.get(position).getName();
-        holder.recipeName.setText(currentRecipeName);
+        String currentRecipeImage = recipeNames.get(position).getImageURL();
 
+        if(currentRecipeImage!=null){
+            Picasso.with(activity_context).load(currentRecipeImage).into(holder.recipeImage);
+        }
+
+        holder.recipeName.setText(currentRecipeName);
     }
 
     @Override
@@ -72,6 +80,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ListAdapterVie
     public class ListAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.recipe_name)
         TextView recipeName;
+
+        @BindView(R.id.recipeImage)
+        ImageView recipeImage;
 
         public ListAdapterViewHolder(View itemView) {
             super(itemView);

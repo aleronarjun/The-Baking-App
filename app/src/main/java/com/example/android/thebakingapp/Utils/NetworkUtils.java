@@ -107,8 +107,11 @@ public class NetworkUtils {
 
                 int id = currentRecipe.getInt("id");
                 String name = currentRecipe.getString("name");
-
+                String image = currentRecipe.getString("image");
                 RecipeName thisName = new RecipeName(id, name);
+                if(!(image.equals("")||image==null)){
+                    thisName.setImageURL(image);
+                }
                 names.add(thisName);
             }
         } catch (JSONException e) {
